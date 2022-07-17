@@ -10,4 +10,19 @@
 </p>
 
 <img src="{{ movie.poster_path }}">
+
+<h2>Rate Movie</h2>
+  <form action="/new_rating/{{movie.movie_id}}" method="POST">
+    <p>
+      Rating <select id="user_rating" name="rating">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </p>
+    <p>
+      <input type="submit">
+    </p>
+  </form>
 {% endblock %}
