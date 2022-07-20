@@ -9,7 +9,7 @@
   {{ movie.overview }}
 </p>
 
-<img src="{{ movie.poster_path }}">
+<img src="{{ movie.poster_path }}" width="300" height="400">
 
 <h2>Rate Movie</h2>
   <form action="/new_rating/{{movie.movie_id}}" method="POST">

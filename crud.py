@@ -59,6 +59,12 @@ def create_rating(user, movie, score):
     
     return rating
 
+def get_rating_by_id(rating_id):
+
+    rating = Rating.query.get(rating_id)
+    return rating
+
+
 def get_rating_by_user_movie(user, movie):
 
     rating = Rating.user.has(user_id=user, movie_id=movie)

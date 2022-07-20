@@ -1,7 +1,7 @@
 """Server for movie ratings app."""
 
 from flask import Flask, render_template, request, flash, session, redirect
-from model import connect_to_db, db
+from model import Rating, connect_to_db, db
 import crud
 
 from jinja2 import StrictUndefined
@@ -80,6 +80,7 @@ def user_profile(user_id):
 @app.route('/new_rating/<movie_id>', methods=['POST'])
 def new_rating(movie_id):
 
+
     score = request.form.get('rating')
     movie_id = crud.get_movie_by_id(movie_id)
 
@@ -89,22 +90,37 @@ def new_rating(movie_id):
         flash("Please Login to make a rating!")
         return redirect('/')
 
-    user = crud.get_user_by_email(email)
-
-
-    testing = crud.get_rating_by_user_movie(user, movie_id)
-    print(testing)
-    # if crud.get_rating_by_user_movie(user, movie_id):
-
-        # flash("You've already rated this movie")
-        # return redirect(f"/user/{user.user_id}")
-    #else:
-        #new_rating = crud.create_rating(user, movie_id, score)
-        #db.session.add(new_rating)
-        #db.session.commit()
     
-        #flash("Rating Stored!")
-        #return redirect("/movies")
+    for rating in movie_id.ratings:
+        if rating.user.email == session['email']:
+
+            flash("You've already rated this movie")
+            return redirect(f"/users/{rating.user.user_id}")
+
+    user = crud.get_user_by_email(email)
+    new_rating = crud.create_rating(user, movie_id, score)
+    db.session.add(new_rating)
+    db.session.commit()
+
+    flash("Rating Stored!")
+    return redirect("/movies")
+
+
+@app.route('/update_rating/<rating_id>', methods=["POST"])
+def update_rating(rating_id):
+
+    
+    rating = crud.get_rating_by_id(rating_id)
+    prev_score = rating.score
+    score = request.form.get('update_rating')
+  
+    Rating.score = score
+    db.session.commit()
+
+    return f'prev_rating: {prev_score} new_rating: {rating.score}'
+
+    
+
 
 if __name__ == "__main__":
     # DebugToolbarExtension(app)

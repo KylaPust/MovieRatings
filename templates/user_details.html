@@ -3,7 +3,21 @@
 {%block title%} {{user.email}} Profile {%endblock%}
 
 {%block body%} 
+{%for rating in user.ratings%}
+<h2>{{rating.movie.title}} {{rating.score}} <form action="/update_rating/{{rating.rating_id}}" method="POST">
+    <p>
+       <select id="update_rating" name="update_rating">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </p>
+    <p>
+      <input type="submit" value="update rating">
+    </p>
+  </form></h2>
+{%endfor%}
 
-{{user.email}}
 
 {%endblock%}
